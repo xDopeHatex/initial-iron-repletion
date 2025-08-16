@@ -50,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lora.variable} ${montserrat.variable}  ${montserratBold.variable}  font-montserrat  antialiased`}
+        className={`${lora.variable} ${montserrat.variable}  ${montserratBold.variable}  font-montserrat`}
       >
         {children}
       </body>
