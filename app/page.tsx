@@ -1,22 +1,22 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { CalculationFormValues } from "@/app/types/calculationsForm.types";
-import { calculationFormSchema } from "@/app/schemas/calculationForm.schema";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
+  const weightInputRef = useRef<HTMLInputElement>(null);
+
   const {
     register,
     handleSubmit,
     control,
+    getValues,
     formState: { errors, isSubmitting },
+    watch,
   } = useForm<CalculationFormValues>({
-    resolver: yupResolver(calculationFormSchema),
     defaultValues: {
-      weight: 0,
-      targetHb: 0,
-      actualHb: 0,
+      weight: "",
     },
   });
 
@@ -24,38 +24,96 @@ export default function Home() {
     console.log("✅ Submitted:", data);
   };
 
+  const [width, setWidth] = useState(20);
+
+  useEffect(() => {
+    console.log("weight>>", getValues("weight"));
+
+    setWidth(weightInputRef?.current ? weightInputRef.current.offsetWidth : 0);
+  }, [getValues("weight")]);
+
+  const weight = watch("weight");
+
+  function hasOneDot(str: string): boolean {
+    // regex: start, any chars except dot, one dot, any chars except dot, end
+
+    const regex = /^[^.]*\.[^.]*$/;
+    return regex.test(str);
+  }
+
+  function hasTwoDot(str: string): boolean {
+    // regex: start, any chars except dot, one dot, any chars except dot, end
+
+    const regex = /\..*\./;
+    return regex.test(str);
+  }
+
   return (
     <div className="max-w-full min-h-screen flex flex-col bg-primary-blue-dark">
       <div className="mx-auto my-24 text-secondary-gray-medium bg-secondary-gray-light min-w-1/2 p-4 rounded-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-sm">
-          <div>
+          <div className="flex gap-4">
             <label className="block">Weight</label>
-            <input
-              type="number"
-              {...register("weight", { valueAsNumber: true })}
-              className="border p-2 w-full"
-            />
+            <div
+              className="border rounded-lg px-2 cursor-text flex max-w-56"
+              onClick={() => weightInputRef.current?.focus()}
+            >
+              <Controller
+                name="weight"
+                control={control}
+                render={({ field }) => {
+                  const raw = String(field.value ?? "");
+                  console.log(
+                    "hasOneDot(weight.toString())>>",
+                    hasOneDot(weight.toString()),
+                  );
+
+                  const size = Math.max(1, raw.length); // 1–3 in your case
+
+                  return (
+                    <input
+                      {...field}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      placeholder="weight in kg"
+                      className="appearance-none bg-transparent border-none outline-none focus:outline-none focus:ring-0 p-0 m-0 font-mono"
+                      size={getValues("weight") ? size : 12}
+                      value={raw}
+                      ref={weightInputRef}
+                      onChange={(e) => {
+                        const isHasOneDot = hasOneDot(weight.toString());
+                        const isTwoDots = hasTwoDot(weight.toString());
+                        let newChar;
+
+                        if (e.target.value.length > weight.length) {
+                          for (let i = 0; i < e.target.value.length; i++) {
+                            if (weight[i] !== e.target.value[i]) {
+                              newChar = e.target.value[i];
+                              break;
+                            }
+                          }
+                        }
+
+                        if (isHasOneDot && newChar === ".") {
+                          return;
+                        } else {
+                          const onlyDigits = e.target.value.replace(
+                            /[^0-9.]/g,
+                            "",
+                          );
+
+                          field.onChange(onlyDigits);
+                        }
+                      }}
+                    />
+                  );
+                }}
+              />
+              {weight && <span className="text-gray-500 -ml-1">kg</span>}
+            </div>
+
             <p className="text-red-600 text-sm">{errors.weight?.message}</p>
-          </div>
-
-          <div>
-            <label className="block">Target Hb</label>
-            <input
-              type="number"
-              {...register("targetHb", { valueAsNumber: true })}
-              className="border p-2 w-full"
-            />
-            <p className="text-red-600 text-sm">{errors.targetHb?.message}</p>
-          </div>
-
-          <div>
-            <label className="block">Actual Hb</label>
-            <input
-              type="number"
-              {...register("actualHb", { valueAsNumber: true })}
-              className="border p-2 w-full"
-            />
-            <p className="text-red-600 text-sm">{errors.actualHb?.message}</p>
           </div>
 
           <button
