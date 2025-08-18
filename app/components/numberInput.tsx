@@ -50,7 +50,6 @@ const NumberInput = ({
               <input
                 {...field}
                 type="text"
-                inputMode="numeric"
                 maxLength={7}
                 placeholder={placeholder}
                 className="appearance-none bg-transparent border-none outline-none focus:outline-none focus:ring-0 p-0 m-0 font-mono"
