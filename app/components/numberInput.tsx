@@ -61,6 +61,8 @@ const NumberInput = ({
 
                   let newChar;
 
+                  console.log('e.target.value.length > field.value.length>>', e.target.value.length > field.value.length)
+
                   if (e.target.value.length > field.value.length) {
                     for (let i = 0; i < e.target.value.length; i++) {
                       if (field.value[i] !== e.target.value[i]) {
