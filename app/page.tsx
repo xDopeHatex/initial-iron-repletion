@@ -111,11 +111,11 @@ export default function Home() {
         {totalCumulativeDoseMg && (
           <div className="bg-secondary-green-dark w-full mt-12 rounded-lg py-8 px-2 text-secondary-gray-light flex flex-col justify-center items-center gap-4">
             <p>
-              Total Iron deficit -{" "}
+              Total Iron deficit:{" "}
               <span className="text-lg">{totalCumulativeDoseMg} mg</span>
             </p>
             <p>
-              Recommended maximum single dose -{" "}
+              Recommended maximum single dose:{" "}
               <span className="text-lg">{doseMg} mg</span>
             </p>
             {isInteger ? (
