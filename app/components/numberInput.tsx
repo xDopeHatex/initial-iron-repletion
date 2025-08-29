@@ -18,7 +18,7 @@ function hasOneDotOrComma(str: string): boolean {
   // regex: start, any chars except dot, one dot, any chars except dot, end
 
     const regex = /^[^.,]*[.,][^.,]*$/;
-  return regex.test(str);
+  return  regex.test(str);
 }
 
 const NumberInput = ({
@@ -72,10 +72,13 @@ const NumberInput = ({
                     }
                   }
 
+                  console.log('ishasOneDotOrComma>>', ishasOneDotOrComma)
+                    console.log('(newChar === "." || newChar === ",")>>', (newChar === "." || newChar === ","))
+
                   if (ishasOneDotOrComma && (newChar === "." || newChar === ",")) {
                     return;
                   } else {
-                    const onlyDigits = e.target.value.replace(/[^0-9.]/g, "");
+                    const onlyDigits = e.target.value.replace(/[^0-9.,]/g, "");
 
                     field.onChange(onlyDigits);
                   }
