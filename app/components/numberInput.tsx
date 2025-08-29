@@ -17,7 +17,7 @@ interface NumberInputProps {
 function hasOneDot(str: string): boolean {
   // regex: start, any chars except dot, one dot, any chars except dot, end
 
-  const regex = /^[^.]*\.[^.]*$/;
+    const regex = /^[^.,]*[.,][^.,]*$/;
   return regex.test(str);
 }
 
