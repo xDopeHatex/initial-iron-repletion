@@ -49,11 +49,11 @@ const NumberInput = ({
             return (
               <input
                 {...field}
-                type="text"
                 maxLength={7}
                 placeholder={placeholder}
                 className="appearance-none bg-transparent border-none outline-none focus:outline-none focus:ring-0 p-0 m-0 font-mono"
                 size={field.value ? size : 12}
+                type="number" inputMode="decimal" step="any"
                 value={raw}
                 ref={inputRef}
                 onChange={(e) => {
