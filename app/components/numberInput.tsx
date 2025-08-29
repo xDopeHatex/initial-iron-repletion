@@ -14,7 +14,7 @@ interface NumberInputProps {
   classes?: string;
 }
 
-function hasOneDot(str: string): boolean {
+function hasOneDotOrComma(str: string): boolean {
   // regex: start, any chars except dot, one dot, any chars except dot, end
 
     const regex = /^[^.,]*[.,][^.,]*$/;
@@ -53,11 +53,11 @@ const NumberInput = ({
                 placeholder={placeholder}
                 className="appearance-none bg-transparent border-none outline-none focus:outline-none focus:ring-0 p-0 m-0 font-mono"
                 size={field.value ? size : 12}
-                type="number" inputMode="decimal" step="any"
+                type="text" inputMode="decimal" step="any"
                 value={raw}
                 ref={inputRef}
                 onChange={(e) => {
-                  const isHasOneDot = hasOneDot(field.value.toString());
+                  const ishasOneDotOrComma = hasOneDotOrComma(field.value.toString());
 
                   let newChar;
 
@@ -72,7 +72,7 @@ const NumberInput = ({
                     }
                   }
 
-                  if (isHasOneDot && newChar === ".") {
+                  if (ishasOneDotOrComma && (newChar === "." || newChar === ",")) {
                     return;
                   } else {
                     const onlyDigits = e.target.value.replace(/[^0-9.]/g, "");
