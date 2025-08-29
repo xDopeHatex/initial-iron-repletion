@@ -65,7 +65,7 @@ export default function Home() {
 
   return (
     <div className="max-w-full min-h-screen flex flex-col bg-primary-blue-dark">
-      <div className="mx-auto sm:my-24 text-secondary-gray-medium bg-secondary-gray-light min-w-1/2 p-4 rounded-lg flex flex-col justify-center items-center">
+      <div className="mx-auto sm:my-24 my-4 text-secondary-gray-medium bg-secondary-gray-light min-w-1/2 p-4 rounded-lg flex flex-col justify-center items-center">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 max-w-sm">
           <NumberInput
             classes="gap-[3.8rem]"
@@ -132,11 +132,14 @@ export default function Home() {
                 every 3-7 days
               </p>
             )}
-            <div>
-              <p>Administration: for children ({">"}1month of age)</p>
-              <p>Dilute doses &ge; 100mg 1:1 with NS Infuse over 30min</p>
+            <div className='bg-secondary-green w-full mt-12 rounded-lg p-8'>
+              <p className='justify-self-center text-xl'>Administration: for children ({">"}1month of age)</p>
+              <div className='flex gap-4 mt-4 flex-col'>
+              <p>Dilute doses &le; 100mg 1:1 with NS Infuse over 30min</p>
               <p>Dilute 200mg in 200mL NS. Infuse over 1 hour</p>
               <p>Dilute 300mg in 250mL. NS. Infuse over at least 1.5 hours</p>
+              </div>
+
             </div>
           </div>
         )}
