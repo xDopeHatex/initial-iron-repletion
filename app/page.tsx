@@ -1,8 +1,8 @@
 "use client";
 
-import { useForm, Controller, Control } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { CalculationFormValues } from "@/app/types/calculationsForm.types";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import NumberInput from "@/app/components/numberInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { calculationFormSchema } from "@/app/schemas/calculationForm.schema";
@@ -18,11 +18,9 @@ export default function Home() {
   const [doseMg, setDoseMg] = useState("300");
 
   const {
-    register,
     handleSubmit,
     control,
-    getValues,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid, isSubmitted },
     watch,
   } = useForm<CalculationFormValues>({
     resolver: yupResolver(calculationFormSchema),
@@ -31,7 +29,10 @@ export default function Home() {
       actualHb: "",
       targetHb: "12",
     },
+    mode: "onChange",
   });
+
+  const isButtonDisabled = (isSubmitted && !isValid) || isSubmitting;
 
   const onSubmit = (data: CalculationFormValues) => {
     const weightKg = Number(data.weight);
@@ -62,6 +63,9 @@ export default function Home() {
   const integerPart = Math.floor(howManyTimesGive);
   const fractionalPart = howManyTimesGive - integerPart;
   const fractionalDose = (fractionalPart * Number(doseMg)).toFixed(2);
+
+  const isMostLikelyValueError =
+    Number(totalCumulativeDoseMg) < 1 || Number(doseMg) < 1;
 
   return (
     <div className="max-w-full min-h-screen flex flex-col bg-primary-blue-dark">
@@ -103,19 +107,20 @@ export default function Home() {
 
           <button
             type="submit"
-            className="bg-black text-white px-4 py-2 rounded w-full cursor-pointer"
+            className="bg-black text-white px-4 py-2 rounded w-full cursor-pointer disabled:cursor-not-allowed disabled:bg-secondary-gray-dark"
+            disabled={isButtonDisabled}
           >
             {totalCumulativeDoseMg ? "Recalculate" : "Calculate"}
           </button>
         </form>
-        {totalCumulativeDoseMg && (
+        {totalCumulativeDoseMg && !isMostLikelyValueError && (
           <div className="bg-secondary-green-dark w-full mt-12 rounded-lg py-8 px-2 text-secondary-gray-light flex flex-col justify-center items-center gap-4">
             <p>
-              Total Iron deficit:{" "}
+              Total Iron deficit :{" "}
               <span className="text-lg">{totalCumulativeDoseMg} mg</span>
             </p>
             <p>
-              Recommended maximum single dose:{" "}
+              Recommended maximum single dose :{" "}
               <span className="text-lg">{doseMg} mg</span>
             </p>
             {isInteger ? (
@@ -132,15 +137,26 @@ export default function Home() {
                 every 3-7 days
               </p>
             )}
-            <div className='bg-secondary-green w-full mt-12 rounded-lg p-8'>
-              <p className='justify-self-center text-xl'>Administration: for children ({">"}1month of age)</p>
-              <div className='flex gap-4 mt-4 flex-col'>
-              <p>Dilute doses &le; 100mg 1:1 with NS Infuse over 30min</p>
-              <p>Dilute 200mg in 200mL NS. Infuse over 1 hour</p>
-              <p>Dilute 300mg in 250mL. NS. Infuse over at least 1.5 hours</p>
-              </div>
-
-            </div>
+            {/*{Number(doseMg) <= 100 && (*/}
+            {/*  <p>*/}
+            {/*    For children over 1 month old: Dilute {doseMg} mg 1:1 with NS Infuse over 30 min*/}
+            {/*  </p>*/}
+            {/*)}*/}
+            {/*{300 > Number(doseMg) > 100 && (*/}
+            {/*    <p>*/}
+            {/*      For children over 1 month old: Dilute {doseMg} */}
+            {/*    </p>*/}
+            {/*)}*/}
+            {/*{Number(doseMg) === 300 && (*/}
+            {/*    <p>*/}
+            {/*      For children over 1 month old: Dilute {doseMg} in 250ml. NS. Infuse at least 1 1/2 hours */}
+            {/*    </p>*/}
+            {/*)}*/}
+          </div>
+        )}
+        {totalCumulativeDoseMg && isMostLikelyValueError && (
+          <div className="bg-secondary-green-dark w-full mt-12 rounded-lg py-8 px-2 text-secondary-gray-light flex flex-col justify-center items-center gap-4">
+            <p>Please chech the values again, it seems there is a mistake</p>
           </div>
         )}
       </div>
