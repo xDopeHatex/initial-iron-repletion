@@ -154,7 +154,7 @@ export default function Home() {
         )}
         {totalCumulativeDoseMg && isMostLikelyValueError && (
           <div className="bg-secondary-green-dark w-full mt-12 rounded-lg py-8 px-2 text-secondary-gray-light flex flex-col justify-center items-center gap-4">
-            <p>Please chech the values again, it seems there's a mistake</p>
+            <p>Please chech the values again, it seems there is a mistake</p>
           </div>
         )}
       </div>
