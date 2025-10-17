@@ -14,11 +14,11 @@ interface NumberInputProps {
   classes?: string;
 }
 
-function hasOneDot(str: string): boolean {
+function hasOneDotOrComma(str: string): boolean {
   // regex: start, any chars except dot, one dot, any chars except dot, end
 
-  const regex = /^[^.]*\.[^.]*$/;
-  return regex.test(str);
+    const regex = /^[^.,]*[.,][^.,]*$/;
+  return  regex.test(str);
 }
 
 const NumberInput = ({
@@ -49,18 +49,19 @@ const NumberInput = ({
             return (
               <input
                 {...field}
-                type="text"
-                inputMode="numeric"
                 maxLength={7}
                 placeholder={placeholder}
                 className="appearance-none bg-transparent border-none outline-none focus:outline-none focus:ring-0 p-0 m-0 font-mono"
                 size={field.value ? size : 12}
+                type="text" inputMode="decimal" step="any"
                 value={raw}
                 ref={inputRef}
                 onChange={(e) => {
-                  const isHasOneDot = hasOneDot(field.value.toString());
+                  const ishasOneDotOrComma = hasOneDotOrComma(field.value.toString());
 
                   let newChar;
+
+                  console.log('e.target.value.length > field.value.length>>', e.target.value.length > field.value.length)
 
                   if (e.target.value.length > field.value.length) {
                     for (let i = 0; i < e.target.value.length; i++) {
@@ -71,10 +72,13 @@ const NumberInput = ({
                     }
                   }
 
-                  if (isHasOneDot && newChar === ".") {
+                  console.log('ishasOneDotOrComma>>', ishasOneDotOrComma)
+                    console.log('(newChar === "." || newChar === ",")>>', (newChar === "." || newChar === ","))
+
+                  if (ishasOneDotOrComma && (newChar === "." || newChar === ",")) {
                     return;
                   } else {
-                    const onlyDigits = e.target.value.replace(/[^0-9.]/g, "");
+                    const onlyDigits = e.target.value.replace(/[^0-9.,]/g, "");
 
                     field.onChange(onlyDigits);
                   }

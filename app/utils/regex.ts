@@ -1,1 +1,2 @@
-export const numberWithDotFieldRegex = /^\d+(\.\d+)?$/;
+export const numberWithDotOrCommaRegex = /^\d+([.,]\d+)?$/;
+

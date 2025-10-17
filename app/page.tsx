@@ -44,6 +44,8 @@ export default function Home() {
 
     setTotalCumulativeDoseMg(totalCumulativeDoseMg.toFixed(2).toString());
 
+    console.log("weightKg>>", weightKg);
+
     if (weightKg < 42.9) {
       setDoseMg(`${(weightKg * 7).toFixed(2)}`);
     } else {
@@ -67,7 +69,7 @@ export default function Home() {
 
   return (
     <div className="max-w-full min-h-screen flex flex-col bg-primary-blue-dark">
-      <div className="mx-auto my-24 text-secondary-gray-medium bg-secondary-gray-light min-w-1/2 p-4 rounded-lg flex flex-col justify-center items-center">
+      <div className="mx-auto sm:my-24 my-4 text-secondary-gray-medium bg-secondary-gray-light min-w-1/2 p-4 rounded-lg flex flex-col justify-center items-center">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 max-w-sm">
           <NumberInput
             classes="gap-[3.8rem]"
